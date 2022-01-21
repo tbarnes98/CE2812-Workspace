@@ -11,6 +11,7 @@
 #include <math.h>
 #include "uart_driver.h"
 #include "memory.h"
+#include "led.h"
 #include "delay.h"
 #include "piezoSpeaker.h"
 
@@ -74,7 +75,7 @@ void songInfo() {
 int main(void) {
 	init_usart2(57600, F_CPU);
 	piezo_init();
-	// led_init();
+	led_init();
 	// Inititialize Imperial March Note Array
 	Note song1[137]={t1n1,  t1n2,  t1n3,  t1n4,  t1n5,  t1n6,  t1n7,  t1n9,  t1n10, t1n11, t1n12, t1n13, t1n14, t1n15,
 				     t1n16, t1n17, t1n18, t1n19, t1n20, t1n21, t1n22, t1n23, t1n24, t1n25, t1n26, t1n27, t1n28, t1n29,
