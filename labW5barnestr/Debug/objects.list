@@ -1,0 +1,7 @@
+"./Src/delay.o"
+"./Src/led.o"
+"./Src/main.o"
+"./Src/memory.o"
+"./Src/piezoSpeaker.o"
+"./Src/uart_driver.o"
+"./Startup/startup_stm32f446retx.o"
