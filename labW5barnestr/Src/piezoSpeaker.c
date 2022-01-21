@@ -69,8 +69,9 @@ void play_note(double frequency, double duration){
 }
 
 
-void play_song(Note *song, int size){
-	for(int i = 0; i < size; i++){
+void play_song(Note *song){
+	static int i = 0;
+	while(song[i].freq != T){
 		play_note(song[i].freq, song[i].duration);
 	}
 }

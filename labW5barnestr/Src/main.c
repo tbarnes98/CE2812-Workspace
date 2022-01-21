@@ -57,6 +57,8 @@ Note t2n1 ={G3, S/3}, t2n46={Ab3,S/3}, t2n2 ={A3, S/3}, t2n47={Bb3,S/3}, t2n3 ={
 	 t2n41={D4,   Q}, t2n42={F4,   Q}, t2n43={Bb4,  Q}, t2n44={D5,   Q}, t2n45={F5,  Q},
 	 t2n61={Bb5,  W}, t2n62={B5,   Q}, t2n63={B5,   Q}, t2n64={B5,   Q}, t2n65={C6,  W};
 
+	Note song3[100] = { {G3, Q}, {}};
+
 void printHelp() {
 	printf("*Commands*\n\r");
 	printf("'rmw {hex address}' - Reads mem at a given address\n\r");

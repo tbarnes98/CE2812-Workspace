@@ -158,7 +158,7 @@ void play_song(Note *song, int size);
 #define	Db8	4434.92
 #define	D8	4698.64
 #define	Eb8	4978.03
-// Ending "termination" value indicating end of asong
+// Ending "termination" value indicating end of a song
 #define T 5000.00
 // Tempo value set at 240 beats per min
 #define BPM 240
