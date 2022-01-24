@@ -89,13 +89,13 @@ int main(void) {
 					 t1n99, t1n100,t1n101,t1n102,t1n103,t1n104,t1n105,t1n106,t1n107,t1n108,t1n109,t1n110,t1n111,t1n112,
 					 t1n113,t1n114,t1n115,t1n116,t1n117,t1n118,t1n119,t1n120,t1n121,t1n122,t1n123,t1n124,t1n125,t1n126,
 					 t1n127,t1n128,t1n129,t1n130,t1n131,t1n132,t1n133,t1n134,t1n135,t1n136};
-	int song1Size = sizeof(song1)/sizeof(song1[0]);
+	//int song1Size = sizeof(song1)/sizeof(song1[0]);
 	// Initialize Super Mario Note Array
 	Note song2[65]={t2n1, t2n46,t2n2, t2n47,t2n3, t2n4, t2n48,t2n5, t2n49,t2n6, t2n7, t2n50,t2n8, t2n51,t2n9, t2n52,
 			  t2n10,t2n11,t2n53,t2n12,t2n54,t2n13,t2n14,t2n55,t2n15,t2n56,t2n16,t2n57,t2n17,t2n18,t2n58,t2n19,t2n59,
 			  t2n20,t2n21,t2n60,t2n22,t2n23,t2n24,t2n25,t2n26,t2n27,t2n28,t2n29,t2n30,t2n31,t2n32,t2n33,t2n34,t2n35,
 			  t2n36,t2n37,t2n38,t2n39,t2n40,t2n41,t2n42,t2n43,t2n44,t2n45,t2n61,t2n62,t2n63,t2n64,t2n65};
-	int song2Size = sizeof(song2)/sizeof(song2[0]);
+	//int song2Size = sizeof(song2)/sizeof(song2[0]);
 	char line[50];
 	char command[10];
 	int address;
@@ -125,11 +125,11 @@ int main(void) {
 			switch(songSelection) {
 				case 1:
 					printf("Playing Imperial March\n\r");
-					play_song(&song1[0], song1Size);
+					play_song(&song1[0]);
 					break;
 				case 2:
 					printf("Playing Super Mario Bros Flagpole Fanfare\n\r");
-					play_song(&song2[0], song2Size);
+					play_song(&song2[0]);
 					break;
 				default:
 					break;

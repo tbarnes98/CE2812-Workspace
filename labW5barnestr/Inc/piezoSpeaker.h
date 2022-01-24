@@ -53,7 +53,7 @@ void piezo_init();
 
 void play_note(double frequency, double duration);
 
-void play_song(Note *song, int size);
+void play_song(Note *song);
 
 // Note Frequency Symbols
 // Rest technically = 0
