@@ -44,14 +44,14 @@
 #define mil 1000000
 
 typedef struct{
-	double freq;
-	double duration;
+	double noteFrequency;
+	double noteDuration;
 } Note;
 
 void piezo_init();
 
-
-void play_note(double frequency, double duration);
+void play_note(Note noteToPlay);
+// void play_note(double playFrequency, double playDuration);
 
 void play_song(Note *song);
 
@@ -160,8 +160,8 @@ void play_song(Note *song);
 #define	Eb8	4978.03
 // Ending "termination" value indicating end of a song
 #define T 5000.00
-// Tempo value set at 240 beats per min
-#define BPM 240
+// Tempo value set at 120 beats per min
+#define BPM 120
 #define H 2*Q
 #define Q 60000/BPM
 #define E Q/2

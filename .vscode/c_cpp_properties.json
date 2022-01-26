@@ -17,7 +17,7 @@
                     "${workspaceFolder}"
                 ]
             },
-            "intelliSenseMode": "linux-gcc-arm"
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4

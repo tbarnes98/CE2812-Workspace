@@ -40,17 +40,16 @@ void piezo_init(){
 	*TIM3_CR1 |= (1<<CR_ARPE_EN);
 
 }
+void play_note(Note noteToPlay) {
 
-
-void play_note(double frequency, double duration){
-
+//void play_note(double playFrequency, double playDuration) {
 
 	*TIM3_PSC = 15;
 	//Divisor controls pitch
-	*TIM3_ARR = mil/frequency;
+	*TIM3_ARR = mil/(noteToPlay.noteFrequency);
 
 	//Loudness (Smaller dividend = louder sound)
-	double freq = frequency/10;
+	double freq = noteToPlay.noteFrequency/10;
 
 	//clear ccr1
 	*TIM3_CCR1 = (*TIM3_CCR1&~(0xFFFF));
@@ -63,15 +62,16 @@ void play_note(double frequency, double duration){
 	//Enables enable bit control register
 	*TIM3_CR1 |= 1;
 	//delay that leaves the speaker on for desired amount of time
-	delay_1ms(duration);
+	delay_1ms(noteToPlay.noteDuration);
 	//Disables enable bit
 	*TIM3_CR1 &= ~1;
 }
 
 
 void play_song(Note *song){
-	static int i = 0;
-	while(song[i].freq != T){
-		play_note(song[i].freq, song[i].duration);
+	int i = 0;
+	while(song[i].noteFrequency != T){
+		play_note(song[i]);
+		i++;
 	}
 }
