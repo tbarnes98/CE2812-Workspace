@@ -41,6 +41,7 @@
 *.su
 *.idb
 *.pdb
+*.launch
 
 # Kernel Module Compile Results
 *.mod*
@@ -51,3 +52,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 /.metadata/
+
+# Other
+/.settings
