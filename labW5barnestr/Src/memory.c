@@ -26,7 +26,7 @@ void readMem(uint32_t addr) {
 	// Formatted print with both hex and decimal values
 	printf("Memory Value at %#08x\n\r"
 		   "Hex: %#08x\n\r"
-		   "Decimal: %d\n\r", addr, *memPtr, *memPtr);
+		   "Decimal: %u\n\r", (int)addr, (int)*memPtr, (int)*memPtr);
 	return;
 }
 
@@ -36,7 +36,7 @@ void writeMem(uint32_t addr, uint32_t data) {
 	// Write data
 	*memPtr = data;
 	// Confirmation printout showing the new value and address
-	printf("Value written at  %#08x: %u \n\r", addr, data);
+	printf("Value written at  %#08x: %u \n\r", (int)addr, (int)data);
 	return;
 }
 

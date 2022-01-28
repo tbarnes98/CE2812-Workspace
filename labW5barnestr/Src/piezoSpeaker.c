@@ -46,10 +46,10 @@ void play_note(Note noteToPlay) {
 
 	*TIM3_PSC = 15;
 	//Divisor controls pitch
-	*TIM3_ARR = mil/(noteToPlay.noteFrequency);
+	*TIM3_ARR = (pitchDivisor)/(noteToPlay.noteFrequency/100);
 
 	//Loudness (Smaller dividend = louder sound)
-	double freq = noteToPlay.noteFrequency/10;
+	double freq = (noteToPlay.noteFrequency/100)/10;
 
 	//clear ccr1
 	*TIM3_CCR1 = (*TIM3_CCR1&~(0xFFFF));
