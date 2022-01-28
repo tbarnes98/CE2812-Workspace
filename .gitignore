@@ -37,6 +37,7 @@
 *.hex
 
 # Debug files
+*/Debug/
 *.dSYM/
 *.su
 *.idb
@@ -56,4 +57,4 @@ dkms.conf
 /.metadata/
 
 # Other
-/.settings
+*/.settings

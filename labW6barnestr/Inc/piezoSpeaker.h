@@ -50,10 +50,10 @@ typedef struct{
 
 void piezo_init();
 
-void play_note(Note noteToPlay);
+int play_note(Note noteToPlay);
 // void play_note(double playFrequency, double playDuration);
 
-void play_song(Note *songToPlay);
+void play_song(Note *song);
 
 // Note Frequency Symbols
 // Rest technically = 0
@@ -161,7 +161,7 @@ void play_song(Note *songToPlay);
 // Ending "termination" value indicating end of a song
 #define T 5000.00
 // Tempo value set at 120 beats per min
-#define BPM 240
+#define BPM 120
 #define H 2*Q
 #define Q 60000/BPM
 #define E Q/2

@@ -33,7 +33,7 @@ Note songSMFF[66]= { {G3, S/3}, {Ab3,S/3}, {A3, S/3}, {Bb3,S/3}, {B3,S/3},
 	 			 	 {Bb5,  W}, {B5,   Q}, {B5,   Q}, {B5,   Q}, {C6,  W}, {T,  Q} };
 
 // Imperial March
-Note songIM[138] = { {A3,  Q}, {A3,  Q}, {A3,   Q}, {r,   Q},
+Note songIM[138] = { {A3,  Q}, {r,   Q}, {A3,   Q}, {r,    Q}, {A3,   Q}, {r,   Q},
  					 {F3,E+S}, {r, E+S}, {C4,   S}, {r,    S}, {A3,   Q}, {r,   Q},
  					 {F3,E+S}, {r, E+S}, {C4,   S}, {r,    S}, {A3,   H}, {r,   H},
  					 {E4,  Q}, {r,   Q}, {E4,   Q}, {r,    Q}, {E4,   Q}, {r,   Q},
@@ -76,47 +76,47 @@ int main(void) {
 	init_usart2(57600, F_CPU);
 	piezo_init();
 	led_init();
-//	char line[50];
-//	char command[10];
-//	int address;
-//	int data;
-//	int length;
-//	int songSelection;
+	char line[50];
+	char command[10];
+	int address;
+	int data;
+	int length;
+	int songSelection;
 	// play_note(261.63, 10000.00);
-//	for(;;) {
-//		// Get command from user
-//		fgets(line, 100, stdin);
-//		// Parse only the command for strcmp
-//		sscanf(line, "%s", command);
-//		if (!strcmp(command, "help")) {
-//			printHelp();
-//		} else if (!strcmp(command, "songs")) {
-//			songInfo();
-//		} else if (!strcmp(command, "rmw")) {
-//			sscanf(line, "%s %X", command, &address);
-//			readMem(address);
-//		} else if (!strcmp(command, "wmw")) {
-//			sscanf(line, "%s %X %u", command, &address, &data);
-//			writeMem(address, data);
-//		} else if (!strcmp(command, "dm")) {
-//			sscanf(line, "%s %X %u", command, &address, &length);
-//			dumpMem(address, length);
-//		} else if (!strcmp(command, "ps")) {
-//			sscanf(line, "%s %u", command, &songSelection);
-//			switch(songSelection) {
-//				case 1:
-//					printf("Playing Imperial March\n\r");
+	for(;;) {
+		// Get command from user
+		fgets(line, 100, stdin);
+		// Parse only the command for strcmp
+		sscanf(line, "%s", command);
+		if (!strcmp(command, "help")) {
+			printHelp();
+		} else if (!strcmp(command, "songs")) {
+			songInfo();
+		} else if (!strcmp(command, "rmw")) {
+			sscanf(line, "%s %X", command, &address);
+			readMem(address);
+		} else if (!strcmp(command, "wmw")) {
+			sscanf(line, "%s %X %u", command, &address, &data);
+			writeMem(address, data);
+		} else if (!strcmp(command, "dm")) {
+			sscanf(line, "%s %X %u", command, &address, &length);
+			dumpMem(address, length);
+		} else if (!strcmp(command, "ps")) {
+			sscanf(line, "%s %u", command, &songSelection);
+			switch(songSelection) {
+				case 1:
+					printf("Playing Imperial March\n\r");
 					play_song(&songIM[0]);
-//					break;
-//				case 2:
-//					printf("Playing Super Mario Bros Flagpole Fanfare\n\r");
-//					play_song(&songSMFF[0]);
-//					break;
-//				default:
-//					break;
-//			}
-//		} else {
-//			printf("Invalid input, type 'help' for instructions\n\r");
-//		}
-//	}
+					break;
+				case 2:
+					printf("Playing Super Mario Bros Flagpole Fanfare\n\r");
+					play_song(&songSMFF[0]);
+					break;
+				default:
+					break;
+			}
+		} else {
+			printf("Invalid input, type 'help' for instructions\n\r");
+		}
+	}
 }
