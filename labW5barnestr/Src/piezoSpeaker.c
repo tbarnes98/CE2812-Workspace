@@ -1,9 +1,9 @@
 /**
  * @file piezoSpeaker.c
  * @author Trevor Barnes
- * @brief 
+ * @brief Provides funtionality for initializing, playing notes, and playing songs on the piezo speaker.
  * @version 0.1
- * @date 2022-01-19
+ * @date 2022-01-12
  * 
  * @copyright Copyright (c) 2022
  * 
@@ -16,62 +16,52 @@
 
 
 void piezo_init(){
-
-	//enable GPIOB and Timer 3 RCC
+	// GPIOB/Timer3 enable in RCC
 	*RCC_AHB1ENR |= (1<<GPIOBEN);
 	*RCC_APB1ENR |= (1<<TIM3_EN);
 
-	//set GPIO B to alternate function (0b10<<9)
-	//clears the two bits and then set it
+	// Set to "alternate function" mode
 	*GPIOB_MODER = (*GPIOB_MODER&~(0b11<<8)) | (PB4_AF_V<<8);
-
-	//set alternate function low register to TIM3
+	// Set AF to low
 	*GPIOB_AFRL |= (1<<AFRL_TIM3_CH1_EN);
 
-	//Configure capture/compare mode register configuration
-	//to enable preload and set to pwm
+	// Set to output capture
 	*TIM3_CCMR1 |= OC1M_PWM2;
 	*TIM3_CCMR1 |= (1<<OC1PE);
-
-	//Configure CCER to enable timer 3 as output capture
 	*TIM3_CCER |= CCER_CC1E;
-
-	//Configure control register to enable preload
+	
+	// Enable Preload
 	*TIM3_CR1 |= (1<<CR_ARPE_EN);
-
 }
+
 void play_note(Note noteToPlay) {
-
-//void play_note(double playFrequency, double playDuration) {
-
 	*TIM3_PSC = 15;
-	//Divisor controls pitch
-	*TIM3_ARR = (pitchDivisor)/(noteToPlay.noteFrequency/100);
+	// Pitch divisor to scale with timer
+	*TIM3_ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
 
-	//Loudness (Smaller dividend = louder sound)
-	double freq = (noteToPlay.noteFrequency/100)/10;
+	// Volume (Smaller dividend = louder sound)
+	unsigned int freq = (noteToPlay.noteFrequency/10);
 
-	//clear ccr1
+	// Clear CCR
 	*TIM3_CCR1 = (*TIM3_CCR1&~(0xFFFF));
 	*TIM3_CCR1 = freq;
 
-	//set EGR (accept only a byte of info so steps)
+	// Set EGR
 	*TIM3_EGR |= EGR_UG;
 
-	//~~~Plays the notes
-	//Enables enable bit control register
+	// Playing note
+	// Enables timer
 	*TIM3_CR1 |= 1;
-	//delay that leaves the speaker on for desired amount of time
+	// Delay for duration of note
 	delay_1ms(noteToPlay.noteDuration);
-	//Disables enable bit
+	// Disables timer
 	*TIM3_CR1 &= ~1;
 }
 
 void play_song(Note *songToPlay){
 	int i = 0;
-	// double freq = songToPlay[i].noteFrequency;
-	// Note newNote = {songToPlay[i].noteFrequency, songToPlay[i].noteDuration };
-	while(songToPlay[i].noteFrequency != T) {
+	// Iterate through song and play each note till "END" value
+	while(songToPlay[i].noteFrequency != END) {
 		play_note(songToPlay[i]);
 		i++;
 	}
