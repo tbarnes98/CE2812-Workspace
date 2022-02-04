@@ -79,7 +79,7 @@ void songInfo() {
     printf("Type 1 or 2 to play a song!\n\r");
     printf("Song 1: Imperial March from Star Wars\n\r");
     printf("Song 2: Metropolis Theme from Ratchet & Clank\n\r");
-    printf("Song 3: Flower Garden from Yoshi's Island");
+    printf("Song 3: Flower Garden from Yoshi's Island\n\r");
 }
 
 int main(void) {
