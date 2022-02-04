@@ -1,7 +1,7 @@
 /**
  * @file memory.h
  * @author Trevor Barnes
- * @brief 
+ * @brief Provides headers for reading, writing, and dumping memory
  * @version 0.1
  * @date 2022-01-19
  * 
@@ -15,8 +15,6 @@
 
 #include <inttypes.h>
 #include "uart_driver.h"
-
-void initMemConsole();
 
 /**
  * Reads and prints the memory value at address provided: "addr"

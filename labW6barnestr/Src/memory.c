@@ -1,7 +1,7 @@
 /**
  * @file memory.c
  * @author Trevor Barnes
- * @brief 
+ * @brief Contains functionality for memory manipulation through the console
  * @version 0.1
  * @date 2022-01-19
  * 
@@ -13,20 +13,13 @@
 #include <inttypes.h>
 #include "memory.h"
 
-#define F_CPU 16000000UL
-
-void initMemConsole() {
-    init_usart2(57600, F_CPU);
-    printf("Memory Console Initialized! Type 'help' for info.\n\r");
-}
-
 void readMem(uint32_t addr) {
 	// Assign and casts a new int pointer the value of addr
 	uint32_t * memPtr = (uint32_t *)addr;
 	// Formatted print with both hex and decimal values
 	printf("Memory Value at %#08x\n\r"
 		   "Hex: %#08x\n\r"
-		   "Decimal: %d\n\r", addr, *memPtr, *memPtr);
+		   "Decimal: %u\n\r", (int)addr, (int)*memPtr, (int)*memPtr);
 	return;
 }
 
@@ -36,7 +29,7 @@ void writeMem(uint32_t addr, uint32_t data) {
 	// Write data
 	*memPtr = data;
 	// Confirmation printout showing the new value and address
-	printf("Value written at  %#08x: %u \n\r", addr, data);
+	printf("Value written at  %#08x: %u \n\r", (int)addr, (int)data);
 	return;
 }
 

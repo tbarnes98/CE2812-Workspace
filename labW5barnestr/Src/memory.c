@@ -1,7 +1,7 @@
 /**
  * @file memory.c
  * @author Trevor Barnes
- * @brief 
+ * @brief Contains functionality for memory manipulation through the console
  * @version 0.1
  * @date 2022-01-19
  * 
@@ -12,13 +12,6 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "memory.h"
-
-#define F_CPU 16000000UL
-
-void initMemConsole() {
-    init_usart2(57600, F_CPU);
-    printf("Memory Console Initialized! Type 'help' for info.\n\r");
-}
 
 void readMem(uint32_t addr) {
 	// Assign and casts a new int pointer the value of addr
