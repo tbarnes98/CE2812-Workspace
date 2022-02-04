@@ -1,7 +1,7 @@
 /**
  * @file piezoSpeaker.c
  * @author Trevor Barnes
- * @brief Provides funtionality for initializing, playing notes, and playing songs on the piezo speaker.
+ * @brief Provides functionality for initializing, playing notes, and playing songs on the piezo speaker.
  * @version 0.1
  * @date 2022-01-12
  * 

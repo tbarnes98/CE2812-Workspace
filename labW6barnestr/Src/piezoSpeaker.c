@@ -1,7 +1,7 @@
 /**
  * @file piezoSpeaker.c
  * @author Trevor Barnes
- * @brief Provides funtionality for initializing, playing notes, and playing songs on the piezo speaker.
+ * @brief Provides functionality for initializing, playing notes, and playing songs on the piezo speaker.
  * @version 0.1
  * @date 2022-01-12
  * 
@@ -14,48 +14,54 @@
 #include "piezoSpeaker.h"
 #include "delay.h"
 
+volatile RCC* const rcc = 0x40023800;
+volatile GPIO* const gpiob = 0x40020400;
+volatile TIM* const tim3 = 0x40000400;
+volatile SYSCFG* const syscfg = 0x40013800;
+volatile EXTI* const exti4 = 0x40013C00;
+
 
 void piezo_init(){
 	// GPIOB/Timer3 enable in RCC
-	*RCC_AHB1ENR |= (1<<GPIOBEN);
-	*RCC_APB1ENR |= (1<<TIM3_EN);
+	(*rcc).AHB1ENR |= (1<<GPIOBEN);
+	(*rcc).APB1ENR |= (1<<TIM3_EN);
 
 	// Set to "alternate function" mode
-	*GPIOB_MODER = (*GPIOB_MODER&~(0b11<<8)) | (PB4_AF_V<<8);
+	(*gpiob).MODER = ((*gpiob).MODER&~(0b11<<8)) | (PB4_AF_V<<8);
 	// Set AF to low
-	*GPIOB_AFRL |= (1<<AFRL_TIM3_CH1_EN);
+	(*gpiob).AFRL |= (1<<AFRL_TIM3_CH1_EN);
 
 	// Set to output capture
-	*TIM3_CCMR1 |= OC1M_PWM2;
-	*TIM3_CCMR1 |= (1<<OC1PE);
-	*TIM3_CCER |= CCER_CC1E;
+	(*tim3).CCMR1 |= OC1M_PWM2;
+	(*tim3).CCMR1 |= (1<<OC1PE);
+	(*tim3).CCER |= CCER_CC1E;
 	
 	// Enable Preload
-	*TIM3_CR1 |= (1<<CR_ARPE_EN);
+	(*tim3).CR1 |= (1<<CR_ARPE_EN);
 }
 
 void play_note(Note noteToPlay) {
-	*TIM3_PSC = 15;
+	(*tim3).PSC = 15;
 	// Pitch divisor to scale with timer
-	*TIM3_ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
+	(*tim3).ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
 
 	// Volume (Smaller dividend = louder sound)
 	unsigned int freq = (noteToPlay.noteFrequency/10);
 
 	// Clear CCR
-	*TIM3_CCR1 = (*TIM3_CCR1&~(0xFFFF));
-	*TIM3_CCR1 = freq;
+	(*tim3).CCR1 = ((*tim3).CCR1&~(0xFFFF));
+	(*tim3).CCR1 = freq;
 
 	// Set EGR
-	*TIM3_EGR |= EGR_UG;
+	(*tim3).EGR |= EGR_UG;
 
 	// Playing note
 	// Enables timer
-	*TIM3_CR1 |= 1;
+	(*tim3).CR1 |= 1;
 	// Delay for duration of note
 	delay_1ms(noteToPlay.noteDuration);
 	// Disables timer
-	*TIM3_CR1 &= ~1;
+	(*tim3).CR1 &= ~1;
 }
 
 void play_song(Note *songToPlay){
@@ -65,4 +71,39 @@ void play_song(Note *songToPlay){
 		play_note(songToPlay[i]);
 		i++;
 	}
+}
+
+void play_note_br(Note noteToplay) {
+
+}
+
+void TIM3_IRQHandler(void) {
+	(*tim3).PSC = 15;
+	// Pitch divisor to scale with timer
+	(*tim3).ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
+	// Volume (Smaller dividend = louder sound)
+	unsigned int freq = (noteToPlay.noteFrequency/10);
+
+	// Clear CCR
+	(*tim3).CCR1 = ((*tim3).CCR1&~(0xFFFF));
+	(*tim3).CCR1 = freq;
+
+	// Set EGR
+	(*tim3).EGR |= EGR_UG;
+
+	// Playing note
+	// Enables timer
+	(*tim3).CR1 |= 1;
+	// Delay for duration of note
+	// This is gonna have to change
+	delay_1ms(noteToPlay.noteDuration);
+	// Disables timer
+	(*tim3).CR1 &= ~1;
+}
+
+void play_song_br(Note *songToPlay) {
+	// PB4 Connected to EXTI4
+	(*syscfg).EXTICR2 &= ~(0xF);
+	(*syscfg).EXTICR2 &= ~(0x1);
+
 }

@@ -15,37 +15,109 @@
 #define PIEZOSPEAKER_H_
 
 // RCC
-#define RCC_AHB1ENR (volatile uint32_t*) 0x40023830
-#define RCC_APB1ENR (volatile uint32_t*) 0x40023840
+typedef struct {
+	uint32_t CR;
+	uint32_t PLL_CFGR;
+	uint32_t CFGR;
+	uint32_t CIR;
+	uint32_t AHB1RSTR;
+	uint32_t AHB2RSTR;
+	uint32_t AHB3RSTR;
+	uint32_t _RESERVED_1_;
+	uint32_t APB1RSTR;
+	uint32_t APB2RSTR;
+	uint32_t _RESERVED_2_;
+	uint32_t _RESERVED_3_;
+	uint32_t AHB1ENR;
+	uint32_t AHB2ENR;
+	uint32_t AHB3ENR;
+	uint32_t _RESERVED_4_;
+	uint32_t APB1ENR;
+	uint32_t APB2ENR;
+	uint32_t _RESERVED_5_;
+	uint32_t _RESERVED_6_;
+} RCC;
 
 // GPIOB
-#define GPIOB_MODER (volatile uint32_t*) 0x40020400
 #define GPIOBEN 1
-#define GPIOB_AFRL (volatile uint32_t*) 0x40020420
 #define AFRL_TIM3_CH1_EN 17
+
+typedef struct {
+	uint32_t MODER;
+	uint32_t OTYPER;
+	uint32_t OSPEEDER;
+	uint32_t PUPDR;
+	uint32_t IDR;
+	uint32_t ODR;
+	uint32_t BSRR;
+	uint32_t LCKR;
+	uint32_t AFRL;
+	uint32_t AFRH;
+} GPIO;
 
 // Timer 3
 #define TIM3_EN 1
-#define TIM3_CCMR1 (volatile uint32_t*) 0x40000418
 #define OC1PE 3
 #define OC1M_PWM2 0b1110000
-#define TIM3_CCER (volatile uint32_t*) 0x40000420
 #define CCER_CC1E 1
-#define TIM3_EGR (volatile uint32_t*) 0x40000414
 #define EGR_UG 1
-#define TIM3_PSC (volatile uint32_t*) 0x40000428
-#define TIM3_ARR (volatile uint32_t*) 0x4000042C
-#define TIM3_CCR1 (volatile uint32_t*) 0x40000434
-#define TIM3_CR1 (volatile uint32_t*) 0x40000400
 #define CR_ARPE_EN 7
 #define CR_CEN 1
+typedef struct {
+	uint32_t CR1;
+	uint32_t CR2;
+	uint32_t SMCR;
+	uint32_t DIER;
+	uint32_t SR;
+	uint32_t EGR;
+	uint32_t CCMR1;
+	uint32_t CCMR2;
+	uint32_t CCER;
+	uint32_t CNT;
+	uint32_t PSC;
+	uint32_t ARR;
+	uint32_t _RESERVED_1_;
+	uint32_t CCR1;
+	uint32_t CCR2;
+	uint32_t CCR3;
+	uint32_t CCR4;
+	uint32_t _RESERVED_2_;
+	uint32_t DCR;
+	uint32_t DMAR;
+	uint32_t TIM2_OR;
+	uint32_t TIM5_OR;
+} TIM;
 
 #define PB4_AF_V 0b10
 #define PB4_AF_P 9
 
 #define pitchDivisor 1000000
+// SYSCFG
+typedef struct {
+	uint32_t MEMRMP;
+	uint32_t PMC;
+	uint32_t EXTICR1;
+	uint32_t EXTICR2;
+	uint32_t EXTICR3;
+	uint32_t EXTICR4;
+	uint32_t CMPCR;
+	uint32_t CFGR;
+} SYSCFG;
 
-typedef struct{
+// Interrupt 
+#define SYSCFG_EXTICR4 (volatile uint32_t*) 0x40013814
+#define NVIC_ISER1 (volatile uint32_t*) 0xE000E104
+typedef struct {
+	uint32_t IMR;
+	uint32_t EMR;
+	uint32_t RTSR;
+	uint32_t FTSR;
+	uint32_t SWIER;
+	uint32_t PR;
+} EXTI;
+
+
+typedef struct {
 	unsigned int noteFrequency;
 	unsigned int noteDuration;
 } Note;
@@ -58,6 +130,10 @@ void play_note(Note noteToPlay);
 
 // Iterates through an array of note structs and ends at the termination value "END"
 void play_song(Note *songToPlay);
+
+void play_note_br(Note noteToplay);
+
+void play_song_br(Note *songToPlay);
 
 // Frequency Value Signifying a rest
 #define r	1
