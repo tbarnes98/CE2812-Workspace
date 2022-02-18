@@ -1,13 +1,7 @@
 /**
  * @file main.c
  * @author Trevor Barnes
- * @brief Main Driver for the Week 5 "Play a Tune" Lab. This program uses a similar menu style to the previous
- * lab. The user is given a new option to play 3 different hard coded songs in arrays of "Note" structs,
- * provided by the piezoSpeaker.h file.
- * Experience: As a former music student I enjoyed working on this lab very much, to the point that I became 
- * sort of a perfectionist with its implementation. Getting the timer configured and working with the piezo speaker
- * was certainly the most difficult and time consuming part. Once I had that figured out though figuring
- * out the best note implementation and songs to play was very enjoyable.
+ * @brief 
  * @version 0.1
  * @date 2022-01-19
  * 
@@ -26,45 +20,6 @@
 #include "piezoSpeaker.h"
 
 #define F_CPU 16000000UL
-
-// Imperial March - Star Wars
-Note songIM[138] = { 
-					{A4, Q}, {A4, Q}, {A4, Q}, {F4, S*3}, {C5, S}, {A4,  Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{E5, Q}, {E5, Q}, {E5, Q}, {F5, S*3}, {C5, S}, {Ab4, Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
-					{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, {Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
-					{C5, S}, {B4, S}, {C5, E}, {r, E}, {F4, E}, {Ab4, Q}, {F4, S*3}, {A4, S},
-					{C5, Q}, {A4, S*3}, {C5, S}, {E5, H},
-					{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
-					{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, {Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
-					{C5, S}, {B4, S}, {C5, E}, {r, E}, {F4, E}, {Ab4, Q}, {F4, S*3}, {C5, S},
-					{A4, Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{END}
-				   };
-
-// Metropolis Theme - Ratchet & Clank
-Note songMT[33] = {
-					{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
-					{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
-					{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
-					{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
-					{END}
-					};
-					
-// Flower Garden - Yoshi's Island
-Note songFG[77] = {
-					{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
-					{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {D4, E}, {E4, E}, {r, Q},
-					{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
-					{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {E4, E}, {D4, E}, {r, Q},
-					{G5, S}, {Gb5, S}, {G5, E+(Q*3)},
-					{r , E}, {F5, E}, {E5, E}, {F5, E}, {E5, E}, {C5, E}, {A4, E}, {G4, E+(Q*5)}, {r,  E},
-					{C5, E}, {B4, E}, {D5, E}, {A5, E}, {G5, E+H+Q}, {r,  E},
-					{A5, E}, {B5, E}, {A5, E}, {G5, E}, {F5, E}, {E5, E}, {D5, E}, {E5, Q}, {C5, E}, {G4, E+(Q*3)}, {r,  E},
-					{C5, E}, {B4, E}, {C5, E}, {D5, E}, {E5, E+Q}, {G5, Q}, {C5, Q}, {E5, Q},
-					{F5, E}, {E5, E}, {F5, E}, {D5, E*2}, {C5, E}, {B4, E}, {C5, E+W},
-					{END} 
-					};
 
 void printHelp() {
 	printf("*Commands*\n\r");
@@ -119,13 +74,13 @@ int main(void) {
 		} else if (!strcmp(command, "ps")) {
 			// Song Selection Command Format:
 			// "ps {songSelection} {background}"
-			sscanf(line, "%s %u %c", command, &songSelection, background);
+			sscanf(line, "%s %u %c", command, &songSelection, &background);
 			if (background == 'b') {
 				switch(songSelection) {
 				case 1:
 					printf("Playing Imperial March in the background\n\r");
 					play_song_br(songIM);
-					break;    
+					break;
 				case 2:
 					printf("Playing Metropolis Theme in the background\n\r");
 					play_song_br(songMT);

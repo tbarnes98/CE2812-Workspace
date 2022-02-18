@@ -14,6 +14,7 @@
 #ifndef PIEZOSPEAKER_H_
 #define PIEZOSPEAKER_H_
 
+#include <inttypes.h>
 // RCC
 typedef struct {
 	uint32_t CR;
@@ -105,7 +106,6 @@ typedef struct {
 } SYSCFG;
 
 // Interrupt 
-#define SYSCFG_EXTICR4 (volatile uint32_t*) 0x40013814
 #define NVIC_ISER1 (volatile uint32_t*) 0xE000E104
 typedef struct {
 	uint32_t IMR;
@@ -116,11 +116,14 @@ typedef struct {
 	uint32_t PR;
 } EXTI;
 
-
 typedef struct {
 	unsigned int noteFrequency;
 	unsigned int noteDuration;
 } Note;
+
+extern Note songIM[];
+extern Note songMT[];
+extern Note songFG[];
 
 // Initializes the piezo speaker to be used with timer 3
 void piezo_init();
@@ -130,8 +133,6 @@ void play_note(Note noteToPlay);
 
 // Iterates through an array of note structs and ends at the termination value "END"
 void play_song(Note *songToPlay);
-
-void play_note_br(Note noteToplay);
 
 void play_song_br(Note *songToPlay);
 
