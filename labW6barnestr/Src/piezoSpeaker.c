@@ -16,7 +16,10 @@
 
 volatile RCC* const rcc = (RCC*) 0x40023800;
 volatile GPIO* const gpiob = (GPIO*) 0x40020400;
+// PWM Timer
 volatile TIM* const tim3 = (TIM*) 0x40000400;
+// Interrupt Timer for Duration
+volatile TIM* const tim4 = (TIM*) 0x40000800;
 volatile SYSCFG* const syscfg = (SYSCFG*) 0x40013800;
 volatile EXTI* const exti4 = (EXTI*) 0x40013C00;
 
@@ -64,11 +67,13 @@ Note songFG[77] = {
 					{END} 
 			};
 
+int volumeDivisor = 10;
 
 void piezo_init(){
-	// GPIOB/Timer3 enable in RCC
+	// GPIOB/Timer3/Timer4 enable in RCC
 	(*rcc).AHB1ENR |= (1<<GPIOBEN);
 	(*rcc).APB1ENR |= (1<<TIM3_EN);
+	(*rcc).APB1ENR |= (1<<TIM4_EN);
 
 	// Set to "alternate function" mode
 	(*gpiob).MODER = ((*gpiob).MODER&~(0b11<<8)) | (PB4_AF_V<<8);
@@ -82,6 +87,9 @@ void piezo_init(){
 	
 	// Enable Preload
 	(*tim3).CR1 |= (1<<CR_ARPE_EN);
+
+	// Configure Timer 4 for Interrupt
+	(*tim4).DIER |= (1<<DIER_TIE);
 }
 
 void play_note(Note noteToPlay) {
@@ -90,7 +98,7 @@ void play_note(Note noteToPlay) {
 	(*tim3).ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
 
 	// Volume (Smaller dividend = louder sound)
-	unsigned int freq = (noteToPlay.noteFrequency/10);
+	unsigned int freq = (noteToPlay.noteFrequency/volumeDivisor);
 
 	// Clear CCR
 	(*tim3).CCR1 = ((*tim3).CCR1&~(0xFFFF));
@@ -117,31 +125,38 @@ void play_song(Note *songToPlay){
 	}
 }
 
-void TIM3_IRQHandler(void) {
+void TIM4_IRQHandler(void) {
 	//temp
+	tim4->SR = 0;
 	if(PLAY) {
 		(*tim3).PSC = 15;
 		// Pitch divisor to scale with timer
 		//current note frequency global variable
-		//(*tim3).ARR = (pitchDivisor)/(noteToPlay.noteFrequency);
+		(*tim3).ARR = (pitchDivisor)/(currentSong[currentNoteIndex].noteFrequency);
 
 		// Volume (Smaller dividend = louder sound)
 		//current note frequency global variable
-		//unsigned int freq = (noteToPlay.noteFrequency/10);
+		unsigned int freq = (currentSong[currentNoteIndex].noteFrequency/volumeDivisor);
 
 		// Clear CCR
 		(*tim3).CCR1 = ((*tim3).CCR1&~(0xFFFF));
-		//(*tim3).CCR1 = freq;
+		(*tim3).CCR1 = freq;
 
 		// Set EGR
 		(*tim3).EGR |= EGR_UG;
-
+		// Set timer 4 count to duration of note
+		(*tim4).CNT = (currentSong[currentNoteIndex].noteDuration);
+		(*tim4).EGR |= EGR_UG;
+		// Start timer 4
+		(*tim4).CR1 |= 1;
 		// Playing note
 		// Enables timer
 		(*tim3).CR1 |= 1;
 		// Delay for duration of note
-		// This is gonna have to change
+
 		//delay_1ms(noteToPlay.noteDuration);
+
+
 		// Load timer with value of note duration
 		//currentNote = currentSong[currentNoteIndex];
 	} else {
@@ -150,6 +165,7 @@ void TIM3_IRQHandler(void) {
 		}
 		//currentNote = currentSong
 	}
+	currentNoteIndex++;
 }
 
 void play_song_br(Note *songToPlay) {

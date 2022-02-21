@@ -41,7 +41,8 @@ typedef struct {
 
 // GPIOB
 #define GPIOBEN 1
-#define AFRL_TIM3_CH1_EN 17
+#define PB4_AF_V 0b10
+#define PB4_AF_P 9
 
 typedef struct {
 	uint32_t MODER;
@@ -56,41 +57,44 @@ typedef struct {
 	uint32_t AFRH;
 } GPIO;
 
-// Timer 3
+
+typedef struct {
+	uint32_t CR1;     // Control Register 1
+	uint32_t CR2;     // Control Register 2
+	uint32_t SMCR;    // Slave Mode Control Register 
+	uint32_t DIER;    // DMA/Interrupt Enable Register
+	uint32_t SR;      // Status Register
+	uint32_t EGR;     // Event Generation Register
+	uint32_t CCMR1;   // Capture/Compare Mode Register 1
+	uint32_t CCMR2;   // Capture/Compare Mode Register 2
+	uint32_t CCER;    // Capture/Compare Enable Register 
+	uint32_t CNT;     // Counter
+	uint32_t PSC;     // Prescaler
+	uint32_t ARR;     // Auto-Reload Register
+	uint32_t _RESERVED_1_; 
+	uint32_t CCR1;    // Capture/Compare Register 1
+	uint32_t CCR2;    // Capture/Compare Register 2
+	uint32_t CCR3;    // Capture/Compare Register 3
+	uint32_t CCR4;    // Capture/Compare Register 4
+	uint32_t _RESERVED_2_;
+	uint32_t DCR;     // DMA Control Register
+	uint32_t DMAR;    // DMA Address for Full Transfer
+	uint32_t TIM2_OR; // TIM2 Option Register
+	uint32_t TIM5_OR; // TIM5 Option Register
+} TIM;
+
+// Timers 3 & 4
 #define TIM3_EN 1
+#define TIM4_EN 2
+#define AFRL_TIM3_CH1_EN 17
 #define OC1PE 3
 #define OC1M_PWM2 0b1110000
 #define CCER_CC1E 1
 #define EGR_UG 1
 #define CR_ARPE_EN 7
 #define CR_CEN 1
-typedef struct {
-	uint32_t CR1;
-	uint32_t CR2;
-	uint32_t SMCR;
-	uint32_t DIER;
-	uint32_t SR;
-	uint32_t EGR;
-	uint32_t CCMR1;
-	uint32_t CCMR2;
-	uint32_t CCER;
-	uint32_t CNT;
-	uint32_t PSC;
-	uint32_t ARR;
-	uint32_t _RESERVED_1_;
-	uint32_t CCR1;
-	uint32_t CCR2;
-	uint32_t CCR3;
-	uint32_t CCR4;
-	uint32_t _RESERVED_2_;
-	uint32_t DCR;
-	uint32_t DMAR;
-	uint32_t TIM2_OR;
-	uint32_t TIM5_OR;
-} TIM;
+#define DIER_TIE 6
 
-#define PB4_AF_V 0b10
-#define PB4_AF_P 9
 
 #define pitchDivisor 1000000
 // SYSCFG
@@ -125,7 +129,7 @@ extern Note songIM[];
 extern Note songMT[];
 extern Note songFG[];
 
-// Initializes the piezo speaker to be used with timer 3
+// Initializes the piezo speaker to be used with timer 3. Also initializes timer 4 for note duration interrupt
 void piezo_init();
 
 // Plays a given note at a certain frequency for a certain duration
