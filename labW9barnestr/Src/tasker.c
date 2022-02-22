@@ -13,11 +13,9 @@
 #include <inttypes.h>
 #include "tasker.h"
 
-void SysTick_Init() {
 
-}
-
-void init_task(uint32_t task_num, uint32_t stacksize, void(*entry_point)(void), uint32_t ticks) {
+void init_task(uint32_t task_num, uint32_t stacksize, void(*entry_point)(void),
+    uint32_t ticks) {
     tasks[task_num].stack_pointer = (uint32_t*)malloc(stacksize*sizeof(uint32_t));
     tasks[task_num].stack_pointer += stacksize;
     *(--tasks[task_num].stack_pointer) = 0x01000000; // PSR
@@ -59,10 +57,6 @@ void tasker_tick() {
         tasks[next_task].ticks_remaining = tasks[next_task].ticks_starting;
         //*scb_icsr |= 1<<PENDSVSET;
     }
-}
-
-void SysTick_Handler(void) {
-    
 }
 
 void PendSV_Handler(void) {

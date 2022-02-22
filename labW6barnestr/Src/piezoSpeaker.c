@@ -67,8 +67,8 @@ Note songFG[77] = {
 	{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
 	{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {E4, E}, {D4, E}, {r, Q},
 	{G5, S}, {Gb5, S}, {G5, E+(Q*3)},
-	{r , E}, {F5, E}, {E5, E}, {F5, E}, {E5, E}, {C5, E}, {A4, E}, {G4, E+(Q*5)}, 
-	{r,  E},
+	{r , E}, {F5, E}, {E5, E}, {F5, E}, {E5, E}, {C5, E}, {A4, E}, 
+	{G4, E+(Q*5)}, {r,  E},
 	{C5, E}, {B4, E}, {D5, E}, {A5, E}, {G5, E+W+E}, {r,  E},
 	{A5, E}, {B5, E}, {A5, E}, {G5, E}, {F5, E}, {E5, E}, {D5, E}, {E5, Q}, 
 	{C5, E}, {G4, E+(Q*3)}, {r,  E},
@@ -167,7 +167,8 @@ void TIM4_IRQHandler(void) {
 		// Delay for duration of note
 
 		//delay_1ms(noteToPlay.noteDuration);
-
+		// Instead of delay, have timer count to loaded value
+		// Then trigger interrupt when count value has been reached
 
 		// Load timer with value of note duration
 		//currentNote = currentSong[currentNoteIndex];
