@@ -1,7 +1,19 @@
 /**
  * @file main.c
  * @author Trevor Barnes
- * @brief 
+ * @brief Main Driver for the Week 6 "Background Music" Lab. This program uses
+ *  a similar menu style to the previous lab. The user is given a new option to
+ * play 3 different hard coded songs in arrays of "Note" structs, provided by 
+ * the piezoSpeaker.h file. However, the user can now select whether or not the
+ * music should play in the background to allow other functionality. 
+ * Experience: This lab was a challenge for me. I found that understanding 
+ * interrupts, and mainly how to configure them, was a roadblock that took me 
+ * awhile to figure out. Cleary, as this lab is incomplete I was not able to 
+ * fully implement my design. I do have a general idea of the structure of the
+ * program I would like to implement. For my own sake and sanity, I am going to 
+ * work on trying finish this lab at the very least over break just so I can
+ * see what it is like to get an interrupt driven program working. In this 
+ * case I just managed my time wrong and let myself get behind on labs.
  * @version 0.1
  * @date 2022-01-19
  * 
@@ -24,9 +36,10 @@
 void printHelp() {
 	printf("*Commands*\n\r");
 	printf("'rmw {hex address}' - Reads mem at a given address\n\r");
-	printf("'wmw {hex address} {value}' - Writes the given value as a word to the given address\n\r");
-	printf("'dm {hex address} {length}' - Dumps the memory at a given address. Defaults to 16 B if no "
-			"length is given\n\r");
+	printf("'wmw {hex address} {value}' - Writes the given value as a word to "
+		   "the given address\n\r");
+	printf("'dm {hex address} {length}' - Dumps the memory at a given address. "
+		   "Defaults to 16 B if no length is given\n\r");
 	printf("'ps {song choice}' - Plays a song with the given selection\n\r");
 	printf("'songs' - Prints info about each song selection\n\r");
 }

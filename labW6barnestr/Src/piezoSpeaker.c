@@ -1,8 +1,10 @@
 /**
  * @file piezoSpeaker.c
  * @author Trevor Barnes
- * @brief Provides functionality for initializing, playing notes, and playing songs on the piezo speaker.
- * @version 0.1
+ * @brief Provides functionality for initializing, playing notes, and playing 
+ * songs on the piezo speaker.
+ * Added interrupt functionality for background playing
+ * @version 0.2
  * @date 2022-01-12
  * 
  * @copyright Copyright (c) 2022
@@ -30,42 +32,50 @@ typedef enum {PLAY, STOP}songStatus;
 
 // Imperial March - Star Wars
 Note songIM[138] = {
-					{A4, Q}, {A4, Q}, {A4, Q}, {F4, S*3}, {C5, S}, {A4,  Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{E5, Q}, {E5, Q}, {E5, Q}, {F5, S*3}, {C5, S}, {Ab4, Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
-					{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, {Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
-					{C5, S}, {B4, S}, {C5, E}, {r, E}, {F4, E}, {Ab4, Q}, {F4, S*3}, {A4, S},
-					{C5, Q}, {A4, S*3}, {C5, S}, {E5, H},
-					{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
-					{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, {Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
-					{C5, S}, {B4, S}, {C5, E}, {r, E}, {F4, E}, {Ab4, Q}, {F4, S*3}, {C5, S},
-					{A4, Q}, {F4, S*3}, {C5, S}, {A4, H},
-					{END}
-		   };
+	{A4, Q}, {A4, Q}, {A4, Q}, {F4, S*3}, {C5, S}, 
+	{A4,  Q}, {F4, S*3}, {C5, S}, {A4, H},
+	{E5, Q}, {E5, Q}, {E5, Q}, {F5, S*3}, {C5, S}, 
+	{Ab4, Q}, {F4, S*3}, {C5, S}, {A4, H},
+	{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
+	{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, 
+	{Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
+	{C5, S}, {B4, S}, {C5, E}, {r, E}, 
+	{F4, E}, {Ab4, Q}, {F4, S*3}, {A4, S},
+	{C5, Q}, {A4, S*3}, {C5, S}, {E5, H},
+	{A5, Q}, {A4, S*3}, {A4, S}, {A5, Q}, {Ab5, S*3}, {G5, S},
+	{Gb5, S}, {F5, S}, {Gb5, E}, {r, E}, 
+	{Bb4, E}, {Eb5, Q}, {D5, S*3}, {Db5, S},
+	{C5, S}, {B4, S}, {C5, E}, {r, E}, 
+	{F4, E}, {Ab4, Q}, {F4, S*3}, {C5, S},
+	{A4, Q}, {F4, S*3}, {C5, S}, {A4, H},
+	{END}
+};
 
 // Metropolis Theme - Ratchet & Clank
 Note songMT[33] = {
-					{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
-					{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
-					{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
-					{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
-					{END}
-			};
+	{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
+	{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
+	{B5,  E}, {G5, E}, {E5, E}, {G5, E}, {B5,  E}, {G5, E}, {E5, E}, {B5,  E},
+	{Bb5, E}, {F5, E}, {D5, E}, {F5, E}, {Bb5, E}, {F5, E}, {D5, E}, {Bb5, E},
+	{END}
+};
 
 // Flower Garden - Yoshi's Island
 Note songFG[77] = {
-					{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
-					{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {D4, E}, {E4, E}, {r, Q},
-					{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
-					{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {E4, E}, {D4, E}, {r, Q},
-					{G5, S}, {Gb5, S}, {G5, E+(Q*3)},
-					{r , E}, {F5, E}, {E5, E}, {F5, E}, {E5, E}, {C5, E}, {A4, E}, {G4, E+(Q*5)}, {r,  E},
-					{C5, E}, {B4, E}, {D5, E}, {A5, E}, {G5, E+W+E}, {r,  E},
-					{A5, E}, {B5, E}, {A5, E}, {G5, E}, {F5, E}, {E5, E}, {D5, E}, {E5, Q}, {C5, E}, {G4, E+(Q*3)}, {r,  E},
-					{C5, E}, {B4, E}, {C5, E}, {D5, E}, {E5, E+Q}, {G5, Q}, {C5, Q}, {E5, Q},
-					{F5, E}, {E5, E}, {F5, E}, {D5, E*2}, {C5, E}, {B4, E}, {C5, E+W},
-					{END} 
-			};
+	{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
+	{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {D4, E}, {E4, E}, {r, Q},
+	{E4, E}, {r, E}, {G4, E}, {r, S}, {G4, S}, {E4, E}, {C4, E}, {r, Q},
+	{A3, E}, {r, E}, {C4, E}, {r, S}, {A3, S}, {E4, E}, {D4, E}, {r, Q},
+	{G5, S}, {Gb5, S}, {G5, E+(Q*3)},
+	{r , E}, {F5, E}, {E5, E}, {F5, E}, {E5, E}, {C5, E}, {A4, E}, {G4, E+(Q*5)}, 
+	{r,  E},
+	{C5, E}, {B4, E}, {D5, E}, {A5, E}, {G5, E+W+E}, {r,  E},
+	{A5, E}, {B5, E}, {A5, E}, {G5, E}, {F5, E}, {E5, E}, {D5, E}, {E5, Q}, 
+	{C5, E}, {G4, E+(Q*3)}, {r,  E},
+	{C5, E}, {B4, E}, {C5, E}, {D5, E}, {E5, E+Q}, {G5, Q}, {C5, Q}, {E5, Q},
+	{F5, E}, {E5, E}, {F5, E}, {D5, E*2}, {C5, E}, {B4, E}, {C5, E+W},
+	{END} 
+};
 
 int volumeDivisor = 10;
 
@@ -132,11 +142,13 @@ void TIM4_IRQHandler(void) {
 		(*tim3).PSC = 15;
 		// Pitch divisor to scale with timer
 		//current note frequency global variable
-		(*tim3).ARR = (pitchDivisor)/(currentSong[currentNoteIndex].noteFrequency);
+		(*tim3).ARR = 
+			(pitchDivisor)/(currentSong[currentNoteIndex].noteFrequency);
 
 		// Volume (Smaller dividend = louder sound)
 		//current note frequency global variable
-		unsigned int freq = (currentSong[currentNoteIndex].noteFrequency/volumeDivisor);
+		unsigned int freq = 
+			(currentSong[currentNoteIndex].noteFrequency/volumeDivisor);
 
 		// Clear CCR
 		(*tim3).CCR1 = ((*tim3).CCR1&~(0xFFFF));
@@ -168,6 +180,7 @@ void TIM4_IRQHandler(void) {
 	currentNoteIndex++;
 }
 
+// Might be unneccessary
 void play_song_br(Note *songToPlay) {
 	// Set current song global variable
 	currentSong = songToPlay;

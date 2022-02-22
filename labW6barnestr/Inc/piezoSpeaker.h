@@ -1,10 +1,11 @@
 /**
  * @file piezoSpeaker.h
  * @author Trevor Barnes
- * @brief Header file for the piezo speaker's C file that provides all of the necessary timer, RCC,
- * and GPIOB values for working with the respective components. Note frequency values and durations
- * are also defined.
- * @version 0.1
+ * @brief Header file for the piezo speaker's C file that provides all of the 
+ * necessary timer, RCC, and GPIOB values for working with the respective 
+ * components. Note frequency values and durations are also defined. 
+ * Registers addresses converted to structs in this new version
+ * @version 0.2
  * @date 2022-01-12
  * 
  * @copyright Copyright (c) 2022
@@ -129,13 +130,15 @@ extern Note songIM[];
 extern Note songMT[];
 extern Note songFG[];
 
-// Initializes the piezo speaker to be used with timer 3. Also initializes timer 4 for note duration interrupt
+// Initializes the piezo speaker to be used with timer 3. 
+// Also initializes timer 4 for note duration interrupt
 void piezo_init();
 
 // Plays a given note at a certain frequency for a certain duration
 void play_note(Note noteToPlay);
 
-// Iterates through an array of note structs and ends at the termination value "END"
+// Iterates through an array of note structs 
+// and ends at the termination value "END"
 void play_song(Note *songToPlay);
 
 void play_song_br(Note *songToPlay);
